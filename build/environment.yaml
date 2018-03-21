@@ -15,6 +15,7 @@ dependencies:
   - anaconda::pylint
   - anaconda::pip
   - omnia::openmm=7.1.1
+  - omnia::parmed=2.7.3
   - omnia::openmoltools=0.8.1
   - conda-forge::yapf=0.17.0
   - openeye::openeye-toolkits
