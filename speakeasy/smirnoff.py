@@ -40,7 +40,7 @@ class Conversion(object):
 
         # Parameterize
         ff = ForceField('forcefield/smirnoff99Frosst.offxml')
-        self.labels = ff.labelMolecules( self.molecules, verbose = True )
+        self.labels = ff.labelMolecules(self.molecules, verbose=False)
         self.off_system = ff.createSystem(
             self.mol2_topo.topology,
             self.molecules,
@@ -53,7 +53,22 @@ class Conversion(object):
             self.off_system,
             self.mol2_topo.positions)
 
+        # Convert to AmberParm
         self.parm = pmd.amber.AmberParm.from_structure(self.pmd_system)
+
+        # HACKY PART!!
+        # Amber specifies that the third atom in an improper is the central
+        # atom, but smirnoff currently specifies the second atom. A check for
+        # impropers was conducted during pmd.openmm.topsystem.load_topology(),
+        # but that looked at the third atom, so we'll recheck the second atom.
+        for i,dihedral in enumerate(cnvs.parm.dihedrals):
+            a1 = dihedral.atom1
+            a2 = dihedral.atom2
+            a3 = dihedral.atom3
+            a4 = dihedral.atom4
+            if a1 in a2.bond_partners and a3 in a2.bond_partners and a4 in a2.bond_partners:
+                (dihedral.atom1, dihedral.atom2, dihedral.atom3, dihedral.atom4) = (a3,a4,a2,a1)
+                dihedral.improper = True
 
         # Create unique atom types
         unique_types = aimtools.unique_types.create_unique_type_list(self.parm)
