@@ -21,11 +21,11 @@ def convert_to_gaff(conversion):
     run_tleap(conversion)
 
 
-def run_antechamber(conversion):
+def run_antechamber(conversion, net_charge=0):
     "Use `antechamber` to convert SYBYL atom types to GAFF atom types."
 
     antechamber = f"""    
-    antechamber -i {conversion.mol2_file} -fi mol2 -o {conversion.output_prefix + '-gaff.mol2'} -fo mol2 -at gaff -dr n
+    antechamber -i {conversion.mol2_file} -fi mol2 -o {conversion.output_prefix + '-gaff.mol2'} -fo mol2 -at gaff -dr n -nc {net_charge}
     """
     antechamber_output = conversion.output_prefix + "-ac.out"
     antechamber_input = conversion.output_prefix + "-ac.in"
@@ -153,7 +153,7 @@ def compare_lj_parameters(reference_prmtop, target_prmtop, reference_to_target_m
 
     logging.debug("Reference → Target")
     logging.debug(
-        f"{'Name':4} {'Eps':5} {'Sig':5} → " f"{'Name':4} {'Eps':5} {'Sig':5}"
+        f"{'Name':4} {'Eps':5} {'Sigma':5} → " f"{'Name':4} {'Eps':5} {'Sigma':5}"
     )
     for reference_atom, target_atom in reference_to_target_mapping.items():
 
@@ -185,8 +185,33 @@ def compare_lj_parameters(reference_prmtop, target_prmtop, reference_to_target_m
         )
 
         logging.debug(
-            f"{reference_name:4} {reference_epsilon:1.3f} {reference_sigma:1.3f} → "
-            f"{target_name:4} {target_epsilon:1.3f} {target_sigma:1.3f}"
+            f"{reference_name:4} {reference_epsilon:4.3f} {reference_sigma:4.3f} → "
+            f"{target_name:4} {target_epsilon:4.3f} {target_sigma:4.3f}"
         )
 
     return lennard_jones
+
+
+def find_bonds(structure):
+    df = pd.DataFrame()
+    for atom in structure.atoms:
+        for bond in atom.bonds:
+            df = df.append(
+                pd.DataFrame(
+                    {
+                        "atom1": bond.atom1.name,
+                        "atom2": bond.atom2.name,
+                        "atom1_type": bond.atom1.type,
+                        "atom2_type": bond.atom2.type,
+                        "req": bond.type.req,
+                        "k": bond.type.k,
+                    },
+                    index=[0],
+                ),
+                ignore_index=True,
+            )
+    return df
+
+
+def compare_bonds(reference_prmtop, target_prmtop, reference_to_target_mapping):
+    pass
