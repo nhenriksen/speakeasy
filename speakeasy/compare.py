@@ -159,7 +159,7 @@ def find_dihedrals(structure):
     return df.drop_duplicates()
 
 
-def label_smirks(structure_mol2):
+def label_smirks(structure_mol2, verbose=True, structure=None):
     ifs = oemolistream()
     flavor = OEIFlavor_MOL2_Forcefield
     ifs.SetFlavor(OEFormat_MOL2, flavor)
@@ -175,29 +175,32 @@ def label_smirks(structure_mol2):
     # Parameterize
     ff = ForceField("forcefield/smirnoff99Frosst.offxml")
     labels = ff.labelMolecules(molecules, verbose=False)
-    # Labels should be a list of length 1 if we pass it a single molecule...
-    for force in labels[0].keys():
-        print(force, end="\n")
-        for index in range(len(labels[0][force])):
-            atom_indices = labels[0][force][index][0]
+    if not verbose:
+        return labels
+    else:
+        # Labels should be a list of length 1 if we pass it a single molecule...
+        for force in labels[0].keys():
+            print(force, end="\n")
+            for index in range(len(labels[0][force])):
+                atom_indices = labels[0][force][index][0]
 
-            atom_names = []
-            atom_types = []
-            for atom_index in atom_indices:
-                atom_name = reference[atom_index].name
-                atom_type = reference[atom_index].type
-                atom_names.append(atom_name)
-                atom_types.append(atom_type)
+                atom_names = []
+                atom_types = []
+                for atom_index in atom_indices:
+                    atom_name = reference[atom_index].name
+                    atom_type = reference[atom_index].type
+                    atom_names.append(atom_name)
+                    atom_types.append(atom_type)
 
-            atom_name_string = "-".join(atom_names)
-            atom_type_string = "-".join(atom_types)
-            smirks_string = labels[0][force][index][2]
-            pid = labels[0][force][index][1]
-            parameter = ff.getParameter(paramID=pid)
+                atom_name_string = "-".join(atom_names)
+                atom_type_string = "-".join(atom_types)
+                smirks_string = labels[0][force][index][2]
+                pid = labels[0][force][index][1]
+                parameter = ff.getParameter(paramID=pid)
 
-            # Sometimes two a SMIRKS pattern for *two* atoms is printed in the nonbonded generator.
-            # I'm not sure why that is.
-            print(f"{atom_name_string:<14} {atom_type_string:<14}" f"{parameter}")
+                # Sometimes two a SMIRKS pattern for *two* atoms is printed in the nonbonded generator.
+                # I'm not sure why that is.
+                print(f"{atom_name_string:<14} {atom_type_string:<14}" f"{parameter}")
 
     return
 
