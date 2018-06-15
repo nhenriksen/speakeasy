@@ -24,9 +24,10 @@ def convert_to_gaff(conversion):
 def run_antechamber(conversion, net_charge=0):
     "Use `antechamber` to convert SYBYL atom types to GAFF atom types."
 
-    antechamber = f"""    
-    antechamber -i {conversion.mol2_file} -fi mol2 -o {conversion.output_prefix + '-gaff.mol2'} -fo mol2 -at gaff -dr n -nc {net_charge}
-    """
+    antechamber = f"""antechamber -i {conversion.mol2_file}"""
+    f""" -fi mol2 -o {conversion.output_prefix + '-gaff.mol2'} -fo mol2 """
+    f""" -at gaff """
+    f""" -dr n -nc {net_charge}"""
     antechamber_output = conversion.output_prefix + "-ac.out"
     antechamber_input = conversion.output_prefix + "-ac.in"
     with open(antechamber_input, "w") as file:
@@ -107,111 +108,3 @@ def run_tleap(conversion):
         logging.debug("Error running `tleap`.")
         logging.error(f"Output: {output}")
         logging.error(f"Error: {error}")
-
-
-def compare_parameters(reference_prmtop, target_prmtop):
-    pass
-
-
-def create_atom_map(reference_prmtop, target_prmtop):
-    reference = pmd.load_file(reference_prmtop, structure=True)
-    target = pmd.load_file(target_prmtop, structure=True)
-
-    reference_graph = generateGraphFromTopology(reference.topology)
-    target_graph = generateGraphFromTopology(target.topology)
-
-    graph_matcher = isomorphism.GraphMatcher(reference_graph, target_graph)
-
-    reference_to_target_mapping = dict()
-
-    if graph_matcher.is_isomorphic():
-        logging.debug("Reference → Target")
-        for (reference_atom, target_atom) in graph_matcher.mapping.items():
-
-            reference_to_target_mapping[reference_atom] = target_atom
-
-            reference_name = reference[reference_atom].name
-            target_name = target[target_atom].name
-
-            reference_type = reference[reference_atom].type
-            target_type = target[target_atom].type
-
-            # ParmEd is 0-indexed.
-            # Add 1 to match AMBER-style indexing.
-            logging.debug(
-                f"{reference_name:4} {reference_type:4} {reference_atom + 1:3d} → "
-                f"{target_atom + 1:3d} {target_type:4} {target_name:4}"
-            )
-
-    return reference_to_target_mapping
-
-
-def compare_lj_parameters(reference_prmtop, target_prmtop, reference_to_target_mapping):
-    lennard_jones = pd.DataFrame()
-    reference = pmd.load_file(reference_prmtop, structure=True)
-    target = pmd.load_file(target_prmtop, structure=True)
-
-    logging.debug("Reference → Target")
-    logging.debug(
-        f"{'Name':4} {'Eps':5} {'Sigma':5} → " f"{'Name':4} {'Eps':5} {'Sigma':5}"
-    )
-    for reference_atom, target_atom in reference_to_target_mapping.items():
-
-        reference_name = reference[reference_atom].name
-        reference_type = reference[reference_atom].type
-        reference_sigma = reference[reference_atom].sigma
-        reference_epsilon = reference[reference_atom].epsilon
-
-        target_name = target[target_atom].name
-        target_type = target[target_atom].type
-        target_sigma = target[target_atom].sigma
-        target_epsilon = target[target_atom].epsilon
-
-        lennard_jones = lennard_jones.append(
-            pd.DataFrame(
-                {
-                    "target_name": target_name,
-                    "target_type": target_type,
-                    "target_e": np.round(target_epsilon, decimals=5),
-                    "target_s": np.round(target_sigma, decimals=5),
-                    "reference_name": reference_name,
-                    "reference_type": reference_type,
-                    "reference_e": np.round(reference_epsilon, decimals=5),
-                    "reference_s": np.round(reference_sigma, decimals=5),
-                },
-                index=[0],
-            ),
-            ignore_index=True,
-        )
-
-        logging.debug(
-            f"{reference_name:4} {reference_epsilon:4.3f} {reference_sigma:4.3f} → "
-            f"{target_name:4} {target_epsilon:4.3f} {target_sigma:4.3f}"
-        )
-
-    return lennard_jones
-
-
-def find_bonds(structure):
-    df = pd.DataFrame()
-    for atom in structure.atoms:
-        for bond in atom.bonds:
-            df = df.append(
-                pd.DataFrame(
-                    {
-                        "atom1": bond.atom1.name,
-                        "atom2": bond.atom2.name,
-                        "atom1_type": bond.atom1.type,
-                        "atom2_type": bond.atom2.type,
-                        "req": bond.type.req,
-                        "k": bond.type.k,
-                    },
-                    index=[0],
-                ),
-                ignore_index=True,
-            )
-    return df
-
-
-def compare_bonds(reference_prmtop, target_prmtop, reference_to_target_mapping):
-    pass
