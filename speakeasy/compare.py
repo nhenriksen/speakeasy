@@ -1,8 +1,6 @@
 import numpy as np
-import os as os
 import logging as logging
 import pandas as pd
-import subprocess as sp
 import parmed as pmd
 from networkx.algorithms import isomorphism
 from openforcefield.typing.engines.smirnoff import (
@@ -31,6 +29,17 @@ from openeye.oechem import (
 
 
 def compare_parameters(reference_prmtop, target_prmtop):
+    """Compare force field parameters between a reference and target parameter file.
+
+    Parameters
+    ----------
+    reference_prmtop : str
+        File name of reference parameter file
+    target_prmtop : str
+        File name of target parameter file
+
+
+    """
     print("Establishing mapping between structures...")
     reference_to_target_mapping = create_atom_map(reference_prmtop, target_prmtop)
     reference = pmd.load_file(reference_prmtop, structure=True)
@@ -44,10 +53,25 @@ def compare_parameters(reference_prmtop, target_prmtop):
     angles = compare_angles(reference, target, reference_to_target_mapping)
     print("Comparing dihedral parameters...")
     dihedrals = compare_dihedrals(reference, target, reference_to_target_mapping)
-    # print("Comparing improper parameters...")
+    print("Comparing improper parameters...")
+    impropers = compare_impropers(reference, target, reference_to_target_mapping)
 
 
 def create_atom_map(reference_prmtop, target_prmtop):
+    """Create a mapping between the atoms in the first and second structure using `networkx.algorithms.isomorphism`.
+    I am not sure how well this performs in general.
+
+    Parameters
+    ----------
+    reference_prmtop : str
+        File name of reference parameter file
+    target_prmtop : str
+        File name of target parameter file
+
+    Returns
+    -------
+
+    """
     reference = pmd.load_file(reference_prmtop, structure=True)
     target = pmd.load_file(target_prmtop, structure=True)
 
@@ -59,7 +83,7 @@ def create_atom_map(reference_prmtop, target_prmtop):
     reference_to_target_mapping = dict()
 
     if graph_matcher.is_isomorphic():
-        logging.debug("Reference → Target")
+        logging.debug("Reference → Target (AMBER 1-based indexing)")
         for (reference_atom, target_atom) in graph_matcher.mapping.items():
 
             reference_to_target_mapping[reference_atom] = target_atom
@@ -148,9 +172,40 @@ def find_dihedrals(structure):
                         "atom2_type": dihedral.atom2.type,
                         "atom3_type": dihedral.atom3.type,
                         "atom4_type": dihedral.atom4.type,
+                        "improper": dihedral.improper,
                         "per": dihedral.type.per,
                         "phi_k": dihedral.type.phi_k,
                         "phase": dihedral.type.phase,
+                    },
+                    index=[0],
+                ),
+                ignore_index=True,
+            )
+    return df.drop_duplicates()
+
+
+def find_impropers(structure):
+    df = pd.DataFrame()
+    for atom in structure.atoms:
+        for improper in atom.dihedrals:
+            df = df.append(
+                pd.DataFrame(
+                    {
+                        "atom1": improper.atom1.name,
+                        "atom2": improper.atom2.name,
+                        "atom3": improper.atom3.name,
+                        "atom4": improper.atom4.name,
+                        "atom1_idx": improper.atom1.idx,
+                        "atom2_idx": improper.atom2.idx,
+                        "atom3_idx": improper.atom3.idx,
+                        "atom4_idx": improper.atom4.idx,
+                        "atom1_type": improper.atom1.type,
+                        "atom2_type": improper.atom2.type,
+                        "atom3_type": improper.atom3.type,
+                        "atom4_type": improper.atom4.type,
+                        "per": improper.type.per,
+                        "phi_k": improper.type.phi_k,
+                        "phase": improper.type.phase,
                     },
                     index=[0],
                 ),
@@ -172,7 +227,6 @@ def label_smirks(structure_mol2, verbose=True, structure=None):
         molecules.append(OEMol(mol))
         # This should now handle single-residue and multi-residue hosts.
 
-    # Parameterize
     ff = ForceField("forcefield/smirnoff99Frosst.offxml")
     labels = ff.labelMolecules(molecules, verbose=False)
     if not verbose:
@@ -187,8 +241,8 @@ def label_smirks(structure_mol2, verbose=True, structure=None):
                 atom_names = []
                 atom_types = []
                 for atom_index in atom_indices:
-                    atom_name = reference[atom_index].name
-                    atom_type = reference[atom_index].type
+                    atom_name = structure[atom_index].name
+                    atom_type = structure[atom_index].type
                     atom_names.append(atom_name)
                     atom_types.append(atom_type)
 
@@ -347,8 +401,8 @@ def compare_angles(reference, target, reference_to_target_mapping, verbose=True)
                     np.round(target_thetaeq, 4) != np.round(target_thetaeq, 4)
                 ):
                     print(
-                        f"\x1b[31m{reference_atom1:>4}--{reference_atom2:<4}--{reference_atom3:<4} {reference_k:4.3f} {reference_thetaeq:4.3f} → "
-                        f"{target_atom1:>4}--{target_atom2:<4}--{target_atom3:<4} {target_k:4.3f} {target_thetaeq:4.3f}\x1b[0m"
+                        f"\x1b[31m{reference_atom1:>4}--{reference_atom2:^4}--{reference_atom3:<4} {reference_k:4.3f} {reference_thetaeq:4.3f} → "
+                        f"{target_atom1:>4}--{target_atom2:^4}--{target_atom3:<4} {target_k:4.3f} {target_thetaeq:4.3f}\x1b[0m"
                     )
                 else:
                     print(
@@ -398,7 +452,10 @@ def compare_dihedrals(reference, target, reference_to_target_mapping, verbose=Tr
             else:
                 pass
         # Check that the atom matches in the same location
-        assert reference_match == target_match
+
+        #########################################
+        # assert reference_match == target_match
+        #########################################
 
         df = reference_atom_dihedrals.merge(
             target_atom_dihedrals,
@@ -437,18 +494,20 @@ def compare_dihedrals(reference, target, reference_to_target_mapping, verbose=Tr
             target_per = dihedral["per"]
             target_phase = dihedral["phase_t"]
 
+            assert(dihedral["improper_r"] == dihedral["improper_t"])
+
             if verbose:
                 if (np.round(reference_k, 3) != np.round(target_k, 3)) or (
                     np.round(target_phase, 3) != np.round(target_phase, 3)
                 ):
                     print(
-                        f"\x1b[31m{reference_atom1:>4}--{reference_atom2:<4}--{reference_atom3:<4}--{reference_atom4:<4} {reference_k:4.3f} {reference_phase:4.0f} {reference_per:4.0f} → "
-                        f"{target_atom1:>4}--{target_atom2:<4}--{target_atom3:<4}--{target_atom4:<4} {target_k:4.3f} {target_phase:4.0f} {target_per:4.0f}\x1b[0m"
+                        f"\x1b[31m{reference_atom1:>4}--{reference_atom2:^4}--{reference_atom3:^4}--{reference_atom4:<4} {reference_k:4.3f} {reference_phase:4.0f} {reference_per:4.0f} → "
+                        f"{target_atom1:>4}--{target_atom2:^4}--{target_atom3:^4}--{target_atom4:<4} {target_k:4.3f} {target_phase:4.0f} {target_per:4.0f}\x1b[0m"
                     )
                 else:
                     print(
-                        f"{reference_atom1:>4}--{reference_atom2:<4}--{reference_atom3:<4}--{reference_atom4:<4} {reference_k:4.3f} {reference_phase:4.0f} {reference_per:4.0f} → "
-                        f"{target_atom1:>4}--{target_atom2:<4}--{target_atom3:<4}--{target_atom4:<4} {target_k:4.3f} {target_phase:4.0f} {target_per:4.0f} "
+                        f"{reference_atom1:>4}--{reference_atom2:^4}--{reference_atom3:^4}--{reference_atom4:<4} {reference_k:4.3f} {reference_phase:4.0f} {reference_per:4.0f} → "
+                        f"{target_atom1:>4}--{target_atom2:^4}--{target_atom3:^4}--{target_atom4:<4} {target_k:4.3f} {target_phase:4.0f} {target_per:4.0f} "
                     )
         dihedrals = dihedrals.append(df, ignore_index=True)
 
