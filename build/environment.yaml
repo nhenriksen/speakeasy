@@ -20,4 +20,4 @@ dependencies:
   - conda-forge::yapf=0.17.0
   - openeye::openeye-toolkits
   - pip:
-    - git+https://github.com/open-forcefield-group/openforcefield@32ad91a0fc20e167738810392a7d9452d4dda3bc
+    - git+https://github.com/open-forcefield-group/openforcefield@65f6b45954bde02c6cec1059661635c53a7f4e35
