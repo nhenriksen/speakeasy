@@ -47,8 +47,10 @@ def create_openmm_system(conversion, molecules):
 def write_smirnoff_frcmod(conversion, topology, system):
     smirnoff_prmtop = conversion.output_prefix + "-smirnoff.prmtop"
     smirnoff_frcmod = conversion.output_prefix + "-smirnoff.frcmod"
+    smirnoff_mol2 = conversion.output_prefix + "-smirnoff.mol2"
     structure = pmd.openmm.load_topology(topology, system)
 
     structure.save(smirnoff_prmtop)
+    structure.save(smirnoff_mol2)
     pmd.tools.writeFrcmod(pmd.load_file(smirnoff_prmtop),
                           smirnoff_frcmod).execute()

@@ -30,7 +30,15 @@ class Conversion(object):
 def parse_arguments():
     ap = argparse.ArgumentParser(description="Speakeasy: a tool for using SMIRNOFF format force fields with Amber")
     ap.add_argument("-i", "--input", required=True, help="Input MOL2 file with Tripos atom names")
+    ap.add_argument("-fi", "--input-format", required=False,
+                    default="mol2",
+                    choices=["mol2", "MOL2"],
+                    help="File format of input file")
     ap.add_argument("-o", "--output", required=True, help="Output MOL2 file with Amber atom names")
+    ap.add_argument("-fo", "--output-format", required=False,
+                    default="mol2",
+                    choices=["mol2", "MOL2"],
+                    help="File format of output file")
     ap.add_argument("-s", "--smirnoff", required=True, help="SMIRNOFF format force field file location")
     ap.add_argument("-fr", "--frcmod", required=True, help="Amber FRCMOD output file name")
     ap.add_argument("--log-level",
@@ -40,8 +48,10 @@ def parse_arguments():
                     )
     args = ap.parse_args()
 
-    # ap.add_argument("-fi", "--input-format", required=True, help="File format of input file")
-    # ap.add_argument("-fo", "--output-format", required=True, help="File format of output file")
+    if args.input_format.lower() != "mol2":
+        raise NotImplementedError("MOL2 is the only input format.")
+    if args.output_format.lower() != "mol2":
+        raise NotImplementedError("MOL2 is the only output format.")
 
     return args
 
@@ -65,7 +75,6 @@ def main():
     conversion.ff = args.smirnoff
     conversion.frcmod = args.frcmod
 
-
     # Method 1
     # Go from Tripos MOL2 to GAFF MOL2 to GAFF-based FRCMOD file.
     write_amber_mol2(conversion)
@@ -78,3 +87,7 @@ def main():
     openeye_molecules = mol2_to_OEMol(conversion)
     topology, system = create_openmm_system(conversion, openeye_molecules)
     write_smirnoff_frcmod(conversion, topology, system)
+
+    from .utils import map, rewrite_smirnoff_with_gaff
+    atom_mapping = map(conversion)
+    rewrite_smirnoff_with_gaff(conversion, atom_mapping)

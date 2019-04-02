@@ -1,0 +1,127 @@
+Force field parameters from benzene.gaff-smirnoff.prmtop
+MASS
+ca     caca.0caca
+ca     caca.0caca
+ca     caca.0caca
+ca     caca.0caca
+ca     caca.0caca
+ca     caca.0caca
+ha      ca.00ha
+ha      ca.00ha
+ha      ca.00ha
+ca0     ca.00ha
+caca     ca.00ha
+caca     ca.00ha
+
+BOND
+ca -ca     cacaha.000   ca.ca00
+ca -ca     cacaha.000   ca.ca00
+ca -ca     cacaha.000   ca.ca00
+ca -ca     cacaha.000   ca.ca00
+ca -ca     cacaha.000   ca.ca00
+ca -ca     cacaha.000   ca.ca00
+ca -ha     cacaha.000   ca.0ha0
+ca -ha     cacaha.000   ca.0ha0
+ca -ha     cacaha.000   ca.0ha0
+ca -ca0    cacaha.000   ca.0ha0
+ca -caca    cacaha.000   ca.0ha0
+ca -caca    cacaha.000   ca.0ha0
+
+ANGLE
+ca -ca -ca      ha0.000  caca0.000
+ca -ca -ca      ha0.000  caca0.000
+ca -ca -ca      ha0.000  caca0.000
+ca -ca -ca      ha0.000  caca0.000
+ca -ca -ca      ha0.000  caca0.000
+ca -ca -ca      ha0.000  caca0.000
+ca -ca -ha      ca0.000  caca0.000
+ca -ca -ha      ca0.000  caca0.000
+ca -ca -ha      ca0.000  caca0.000
+ca -ca -ha      ca0.000  caca0.000
+ca -ca -ha      ca0.000  caca0.000
+ca -ca -ha      ca0.000  caca0.000
+ca -ca -ca0     ca0.000  caca0.000
+ca -ca -ca0     ca0.000  caca0.000
+ca -ca -caca     ca0.000  caca0.000
+ca -ca -caca     ca0.000  caca0.000
+ca -ca -caca     ca0.000  caca0.000
+ca -ca -caca     ca0.000  caca0.000
+
+DIHE
+ca -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ha -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ha -ca -ca -ha     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ha     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ha -ca -ca -ca     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ha -ca -ca -ha     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ca0    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ha     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ha -ca -ca -ca0    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -caca    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ha     ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ha -ca -ca -caca    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -caca    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ca0    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca0-ca -ca -caca    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -caca    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -caca    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+caca-ca -ca -caca    ca     ca.cacaca00000  caha0.000   ca.0    SCEE=ca.ca00000caha SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ha -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ha -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ha -ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ha -ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ha -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ha -ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ha -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ha -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ha -ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ha -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ha     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ca0    ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca0-ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -ca0    ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca0-ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca0-ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca0-ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -caca    ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -caca-ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -caca    ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -caca-ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+caca-ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+caca-ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -caca    ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -caca-ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -ca -caca    ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+ca -ca -caca-ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+caca-ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+caca-ca -ca -ca     ca     0.cahacacacacacaca  caha0.000   ca.0    SCEE=ca.0 SCNB=ca.0
+
+IMPROPER
+
+NONB
+ca     ca.ha0ha00000   0.0haca00000
+ca     ca.ha0ha00000   0.0haca00000
+ca     ca.ha0ha00000   0.0haca00000
+ca     ca.ha0ha00000   0.0haca00000
+ca     ca.ha0ha00000   0.0haca00000
+ca     ca.ha0ha00000   0.0haca00000
+ha     ca.cacaha00000   0.0caca00000
+ha     ca.cacaha00000   0.0caca00000
+ha     ca.cacaha00000   0.0caca00000
+ca0    ca.cacaha00000   0.0caca00000
+caca    ca.cacaha00000   0.0caca00000
+caca    ca.cacaha00000   0.0caca00000
+
