@@ -10,6 +10,13 @@ setup(
     license='MIT',
     packages=['speakeasy'],
     zip_safe=False,
-    ### install_requires=['numpy', 'parmed??'],
+
+    # Create command line script
+    entry_points={
+        'console_scripts': [
+            'speakeasy = speakeasy.command:main',
+        ],
+    },
+
 )
 
