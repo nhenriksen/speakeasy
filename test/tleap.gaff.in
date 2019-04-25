@@ -1,3 +1,0 @@
-source leaprc.gaff2
-mol = loadmol2 phenol.gaff.mol2
-saveamberparm mol phenol.gaff.prmtop phenol.gaff.inpcrd
