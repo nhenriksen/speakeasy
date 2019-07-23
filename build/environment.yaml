@@ -1,23 +1,16 @@
 name: speakeasy
 channels:
-  - anaconda
+  - ambermd
   - omnia
   - conda-forge
   - openeye
 dependencies:
   - python=3.6
-  - anaconda::numpy=1.13.3
-  - anaconda::scipy=1.0.0
-  - anaconda::matplotlib=2.0.2
-  - anaconda::ipykernel=4.8.0
-  - anaconda::networkx=1.11
-  - anaconda::lxml=3.8.0
-  - anaconda::pylint
-  - anaconda::pip
-  - omnia::openmm=7.1.1
-  - omnia::parmed=2.7.3
-  - omnia::openmoltools=0.8.1
-  - conda-forge::yapf=0.17.0
+  - pip
+  - numpy
+  - scipy
+  - jupyter
+  - ambertools
+  - omnia::parmed
+  - omnia::openforcefield
   - openeye::openeye-toolkits
-  - pip:
-    - git+https://github.com/open-forcefield-group/openforcefield@65f6b45954bde02c6cec1059661635c53a7f4e35
