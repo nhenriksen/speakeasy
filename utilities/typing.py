@@ -20,14 +20,6 @@ def check_unique_atom_names(molecule):
     assert atoms == len(atom_names)
 
 
-
-
-
-
-
-
-
-
 def _create_atom_type_list(first_chars, second_chars):
     """ Create all possible two character atom types """
 

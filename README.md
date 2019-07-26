@@ -1,6 +1,11 @@
 # speakeasy
 Automates the application of SMIRNOFF99Frosst parameters to `mol2` files so they can be simulated with AMBER.
 
+![Speakeasy logo.](speakeasy.png)
+
+
+
+
 Make this:
 
 ```

@@ -2,15 +2,9 @@ import logging
 import sys
 import argparse
 
-from .typing import create_unique_type_list
-from .typing import write_unique_frcmod_mol2s
-
-from .amber import write_amber_mol2
-from .amber import write_amber_frcmod
-
-from .smirnoff import mol2_to_OEMol
-from .smirnoff import create_openmm_system
-from .smirnoff import write_smirnoff_frcmod
+from speakeasy.smirnoff import mol2_to_OEMol
+from speakeasy.smirnoff import create_openmm_system
+from speakeasy.smirnoff import write_smirnoff_frcmod
 
 logger = logging.getLogger(__name__)
 
@@ -75,19 +69,6 @@ def main():
     conversion.ff = args.smirnoff
     conversion.frcmod = args.frcmod
 
-    # Method 1
-    # Go from Tripos MOL2 to GAFF MOL2 to GAFF-based FRCMOD file.
-    write_amber_mol2(conversion)
-    write_amber_frcmod(conversion, full=True)
-
-    # Method 2
-    # Go from Tripos MOL2 to an OpenEye OEMol
-    # OpenEye OEMol to SMIRNOFF-based OpenMM System
-    # OpenMM System to MOL2 and FRCMOD via ParmEd
     openeye_molecules = mol2_to_OEMol(conversion)
     topology, system = create_openmm_system(conversion, openeye_molecules)
     write_smirnoff_frcmod(conversion, topology, system)
-
-    from .utils import map, rewrite_smirnoff_with_gaff
-    atom_mapping = map(conversion)
-    rewrite_smirnoff_with_gaff(conversion, atom_mapping)
