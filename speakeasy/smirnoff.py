@@ -1,5 +1,4 @@
 import parmed as pmd
-import numpy as np
 
 from openeye.oechem import (
     oemolistream, OEIFlavor_MOL2_Forcefield,
@@ -85,7 +84,7 @@ def write_smirnoff_frcmod(conversion, topology, system, with_fixes=True):
 
     # FIXME: OpenForceField does not provide atom names!
     for index, atom in enumerate(structure.atoms, 1):
-        atom.name = f"{atom.element_name}{np.random.randint(0, 1000)}"
+        atom.name = f"{atom.element_name}{index}"
 
     structure.save(smirnoff_prmtop, format="amber")
     structure.save(smirnoff_mol2)
