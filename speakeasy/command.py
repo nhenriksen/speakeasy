@@ -1,9 +1,10 @@
 import logging
+import os
 import sys
 import argparse
 
 from speakeasy.smirnoff import mol2_to_OEMol
-from speakeasy.smirnoff import create_openmm_system
+from speakeasy.smirnoff import create_openmm_system, create_openmm_system_from_smiles
 from speakeasy.smirnoff import write_smirnoff_frcmod
 
 logger = logging.getLogger(__name__)
@@ -69,6 +70,10 @@ def main():
     conversion.ff = args.smirnoff
     conversion.frcmod = args.frcmod
 
-    openeye_molecules = mol2_to_OEMol(conversion)
-    topology, system = create_openmm_system(conversion, openeye_molecules)
+    if os.path.isfile(args.input):
+        openeye_molecules = mol2_to_OEMol(conversion)
+        topology, system = create_openmm_system(conversion, openeye_molecules)
+    else:  # must be smiles?
+        topology, system = create_openmm_system_from_smiles(conversion, args.input)
+
     write_smirnoff_frcmod(conversion, topology, system)
