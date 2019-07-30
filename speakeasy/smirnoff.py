@@ -40,6 +40,21 @@ def create_openmm_system(conversion, molecules):
 
     return topology, system
 
+
+def create_openmm_system_from_smiles(conversion, smiles):
+    """
+    Create an OpenMM system using the input MOL2 file and force field file.
+    """
+
+    molecule = Molecule.from_smiles(smiles)
+    topology = Topology.from_molecules([molecule])
+    ff = ForceField(conversion.ff)
+    system = ff.create_openmm_system(topology)
+
+
+    return topology, system
+
+
 def write_smirnoff_frcmod(conversion, topology, system, with_fixes=True):
 
     smirnoff_prmtop = conversion.output_prefix + "-smirnoff.prmtop"
@@ -68,7 +83,7 @@ def write_smirnoff_frcmod(conversion, topology, system, with_fixes=True):
     structure.residues[0].name = "RES"
 
     # FIXME: OpenForceField does not provide atom names!
-    for index, atom in enumerate(structure.atoms):
+    for index, atom in enumerate(structure.atoms, 1):
         atom.name = f"{atom.element_name}{index}"
 
     structure.save(smirnoff_prmtop, format="amber")
