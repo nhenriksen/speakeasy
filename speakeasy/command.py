@@ -24,11 +24,11 @@ class Conversion(object):
 
 def parse_arguments():
     ap = argparse.ArgumentParser(description="Speakeasy: a tool for using SMIRNOFF format force fields with Amber")
-    ap.add_argument("-i", "--input", required=True, help="Input MOL2 file with Tripos atom names")
+    ap.add_argument("-i", "--input", required=True, help="Input MOL2 file with Tripos atom names or SMILES string")
     ap.add_argument("-fi", "--input-format", required=False,
                     default="mol2",
-                    choices=["mol2", "MOL2"],
-                    help="File format of input file")
+                    choices=["mol2", "MOL2", "SMILES", "smiles"],
+                    help="File format of input file (or 'SMILES')")
     ap.add_argument("-o", "--output", required=True, help="Output MOL2 file with Amber atom names")
     ap.add_argument("-fo", "--output-format", required=False,
                     default="mol2",
@@ -43,8 +43,8 @@ def parse_arguments():
                     )
     args = ap.parse_args()
 
-    if args.input_format.lower() != "mol2":
-        raise NotImplementedError("MOL2 is the only input format.")
+    if args.input_format.lower() != "mol2" or args.input_format.lower() != "smiles":
+        raise NotImplementedError("Only MOL2 and SMILES input are supported.")
     if args.output_format.lower() != "mol2":
         raise NotImplementedError("MOL2 is the only output format.")
 
