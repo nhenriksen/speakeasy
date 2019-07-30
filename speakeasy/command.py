@@ -43,11 +43,6 @@ def parse_arguments():
                     )
     args = ap.parse_args()
 
-    if args.input_format.lower() != "mol2" or args.input_format.lower() != "smiles":
-        raise NotImplementedError("Only MOL2 and SMILES input are supported.")
-    if args.output_format.lower() != "mol2":
-        raise NotImplementedError("MOL2 is the only output format.")
-
     return args
 
 
