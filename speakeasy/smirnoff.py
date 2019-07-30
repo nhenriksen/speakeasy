@@ -43,7 +43,7 @@ def create_openmm_system(conversion, molecules):
 
 def create_openmm_system_from_smiles(conversion, smiles):
     """
-    Create an OpenMM system using the input MOL2 file and force field file.
+    Create an OpenMM system using SMILES and force field file.
     """
 
     molecule = Molecule.from_smiles(smiles)
