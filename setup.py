@@ -16,7 +16,6 @@ setup(
         'console_scripts': [
             'speakeasy = speakeasy.command:main',
         ],
-    },
+    }, install_requires=['parmed']
 
 )
-

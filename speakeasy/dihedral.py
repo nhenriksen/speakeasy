@@ -1,4 +1,4 @@
-import parmed.topologyobjects
+import parmed as pmd
 
 
 def _process_dihedral(struct, force):
@@ -12,7 +12,7 @@ def _process_dihedral(struct, force):
         if key in typemap:
             dihed_type = typemap[key]
         else:
-            dihed_type = parmed.topologyobjects.DihedralType(phi_k, per, phase)
+            dihed_type = pmd.topologyobjects.DihedralType(phi_k, per, phase)
             typemap[key] = dihed_type
             struct.dihedral_types.append(dihed_type)
         # This is the line that has been changed (ak.bond_partners -> ai.bond_partners)
@@ -20,6 +20,6 @@ def _process_dihedral(struct, force):
             ak in ai.bond_partners and aj in ai.bond_partners and al in ai.bond_partners
         )
         struct.dihedrals.append(
-            parmed.topologyobjects.Dihedral(ai, aj, ak, al, improper=improper, type=dihed_type)
+            pmd.topologyobjects.Dihedral(ai, aj, ak, al, improper=improper, type=dihed_type)
         )
     struct.dihedral_types.claim()

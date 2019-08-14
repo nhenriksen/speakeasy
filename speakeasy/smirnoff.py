@@ -1,4 +1,5 @@
 import parmed as pmd
+import numpy as np
 
 from openeye.oechem import (
     oemolistream, OEIFlavor_MOL2_Forcefield,
@@ -7,7 +8,7 @@ from openeye.oechem import (
 from openforcefield.typing.engines.smirnoff import ForceField
 from openforcefield.topology import Molecule, Topology
 
-from .parmed import _process_dihedral
+from .dihedral import _process_dihedral
 
 def mol2_to_OEMol(conversion):
     """
@@ -36,8 +37,6 @@ def create_openmm_system(conversion, molecules):
     ff = ForceField(conversion.ff)
     system = ff.create_openmm_system(topology)
 
-
-
     return topology, system
 
 
@@ -51,6 +50,7 @@ def create_openmm_system_from_smiles(conversion, smiles):
     ff = ForceField(conversion.ff)
     system = ff.create_openmm_system(topology)
 
+    molecule.generate_conformers(n_conformers=1)
 
     return topology, system
 
@@ -84,7 +84,7 @@ def write_smirnoff_frcmod(conversion, topology, system, with_fixes=True):
 
     # FIXME: OpenForceField does not provide atom names!
     for index, atom in enumerate(structure.atoms, 1):
-        atom.name = f"{atom.element_name}{index}"
+        atom.name = f"{atom.element_name}{np.random.randint(0, 1000)}"
 
     structure.save(smirnoff_prmtop, format="amber")
     structure.save(smirnoff_mol2)
